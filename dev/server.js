@@ -100,6 +100,17 @@ app.post('/swipe',function(req,res){
     });
 });
 
+app.get('/swipe',function(req,res){
+    const rfidCardNumber=req.query.rfidCardNumber;
+    const amount=req.query.amount;
+    const tollBoothID=req.query.tollBoothID;
+    const transaction=new Model.Transaction(amount,tollBoothID);
+
+    dbop.swipeToPayToll(rfidCardNumber,transaction,function(data){
+        res.send(data);
+    });
+});
+
 app.post('/addTollBooth',function(req,res){
     const name=req.body.name;
     const address=req.body.address;
