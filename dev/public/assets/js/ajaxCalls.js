@@ -2,7 +2,7 @@ $(document).ready(function(){
     $('#registerbtn').click(function(){   
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/createUser",
+            url: "https://rfid-project-sajagjain.herokuapp.com/createUser",
             data: {
                 "rfidCardNumber":$('#rfid').val(),
                 "name":$('#fullname').val(),
@@ -24,7 +24,7 @@ $(document).ready(function(){
     $('#loginbtn').click(function(){   
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/login",
+            url: "https://rfid-project-sajagjain.herokuapp.com/login",
             data: {
                 "username":$('#lusername').val(),
                 "password":$('#lpassword').val(),
@@ -34,7 +34,7 @@ $(document).ready(function(){
                 if(result.code==200){
                     console.log(result);
                     sessionStorage.setItem("data",JSON.stringify(result.data));
-                    window.location.href = "http://localhost:3000/dashboard";
+                    window.location.href = "https://rfid-project-sajagjain.herokuapp.com/dashboard";
                 }else{
                     console.log(result);
                     $('#messageLabelLoginPage').text(result.message);
@@ -46,7 +46,7 @@ $(document).ready(function(){
     $('#addMoneyButton').click(function(){   
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/addMoney",
+            url: "https://rfid-project-sajagjain.herokuapp.com/addMoney",
             data: {
                 "rfidCardNumber":$('#mrfidCardNumber').val(),
                 "amount":$('#mamount').val(),
@@ -55,7 +55,7 @@ $(document).ready(function(){
             success: function(result){
                 if(result.code==200){
                     console.log(result);
-                    window.location.href="http://localhost:3000/dashboard";
+                    window.location.href="https://rfid-project-sajagjain.herokuapp.com/dashboard";
                 }else{
                     console.log(result);
                 }
