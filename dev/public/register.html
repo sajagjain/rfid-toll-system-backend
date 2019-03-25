@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <title>RFID Toll System</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet"
+    </head>
+    <body>
+        <div class="btn-primary slant">
+            <h2 class="unslantText">Registration</h2>
+        </div>
+        <div class="container" style="margin-top:-100px;">
+            <div class="row">
+                <div class="shadow-md col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1" style="background-color:white;padding:35px;">
+                    <form id="registerForm" action="http://localhost:3000/createUser" method="POST">
+                        <label>Full Name</label>
+                        <input class="form-control" type="text" id="fullname" required>
+                        <label>Username</label>
+                        <input class="form-control" type="text" id="username" required>
+                        <label>Password</label>
+                        <input class="form-control" type="password" id="password" required>
+                        <label>RFID Number</label>
+                        <input class="form-control" type="text" id="rfid" required>
+                        <label>Date of birth</label>
+                        <input class="form-control" type="date" id="dob" required>
+                        <label>Gender</label><br/>
+                        <input type="radio" name="gender" class="gender" value="Male"><span>Male</span>
+                        <input type="radio" name="gender" class="gender" value="Female"><span>Female</span><br/>
+                        <label>Driving License Number</label>
+                        <input class="form-control" type="text" id="dlnumber" required>
+                        <label>Email Address</label>
+                        <input class="form-control" type="email" id="emailAddress" required>
+                        <label>Mobile Number</label>
+                        <input class="form-control" type="number" minlength="10" maxlength="10" id="mobileNumber" required>
+                        <br/>
+                        <input type="button" id="registerbtn" class="btn btn-primary btn-outline" style="border-radius:0px;" value="Register"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <script src="assets/js/ajaxCalls.js"></script>
+        <script>
+               
+            //    $(document).ready(function(){
+                    
+            //         let data=sessionStorage.getItem("data");
+            //         alert(data);
+            //         if(data===null||data===undefined||data==null||data==undefined){
+                        
+            //         }else{
+            //             window.location.href="http://localhost:3000/dashboard";
+            //         }
+            //     });
+                $(document).ready(function(){
+                    
+                    let check=sessionStorage.getItem("data");
+                    //alert('hit'+check);
+                    if(check===null||check=="null"||check==="null"||check===undefined||check==null||check==undefined){
+                        
+                    }else{
+                        window.location.href="http://localhost:3000/dashboard";
+                    }
+                });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,220 @@
+<html>
+    <head>
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet"
+    </head>
+    <body>
+            <div class="container">
+ 
+                <!-- .navbar-fixed-top, or .navbar-fixed-bottom can be added to keep the nav bar fixed on the screen -->
+                <nav class="navbar navbar-default navbar-fixed-top">
+                    <div class="container-fluid">
+                    
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header" style="width:100%">    
+                        <a onclick="logout()"><span class="pull-right glyphicon glyphicon-off" style="font-size:22px;padding:15px;color:darkblue"></span></a>
+                        <!-- You'll have to add padding in your image on the top and right of a few pixels (CSS Styling will break the navbar) -->
+                        <a class="pull-left" href="#" style="font-size:22px;font-family: 'Open Sans', sans-serif;padding:10px;">Ditto</a>
+                    </div>
+                    </div><!-- /.container-fluid -->
+                </nav>
+            </div>
+            <div class="slant">
+                <h2 class="unslantText" id="dusername"></h2>
+                <div class="unslantTextDesc"id="dbalance">jdadj</div>
+                <div class="unslantBtnContainer">
+                    <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="shadow-md btn btn-primary btn-outline unslantBtn">Add Money</button>
+                </div>
+            </div>
+
+            <!-- Modal Code -->
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Add Money to wallet</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="addMoneyForm">
+                            <label>RFID Card Number</label>
+                            <input class="form-control" type="text" name="mrfidCardNumber" id="mrfidCardNumber"disabled=disabled/>
+                            <label>Amount</label>
+                            <input class="form-control" type="text" name="mamount" id="mamount"/><br/>
+                            <button type="button" id="addMoneyButton" class="shadow-md btn btn-primary btn-outline">Add Money</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+            <div class="container" style="margin-top:-35px;">
+                <div class="row">
+                    <input id="queryHolder" class="shadow-md col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1" 
+                    style="background-color:white;padding:25px;font-size: 20px;" 
+                    type="text" class="form-control" placeholder="Search">
+                </div>
+
+                <div class="row">
+                    <div id="transactionContainer" class="shadow-md col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1" style="padding:30px;">
+                        <h3>Transactions</h3>
+                        <hr/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <script src="assets/js/ajaxCalls.js"></script>
+        <script>
+           
+            window.onload=function(){
+                
+                $(document).ready(function(){
+                    
+                    let check=sessionStorage.getItem("data");
+                    //alert('hit'+check);
+                    if(check===null||check=="null"||check==="null"||check===undefined||check==null||check==undefined){
+                        window.location.href="http://localhost:3000/login";
+                    }
+                });
+                
+                const data=JSON.parse(sessionStorage.getItem("data"));
+                
+                
+                
+                console.log(data);
+                if(data!==null&&data!==undefined){
+                
+                    $.ajax({
+                    type: "GET",
+                    url: "http://localhost:3000/user/"+data.rfidCardNumber,
+                    dataType:'json',
+                    success: function(result){
+                        if(result.code==200){
+                            console.log(result);
+                            sessionStorage.setItem("data",JSON.stringify(result.data));
+                        }else{
+                            console.log(result);
+                            $('#messageLabelLoginPage').text(result.message);
+                        }
+                    }
+                });
+                
+
+                    $("#dusername").text("Hello "+data.name.charAt(0).toUpperCase()+data.name.slice(1));
+                    $("#dbalance").text("₹ "+data.wallet.walletBalance);
+                    $('#mrfidCardNumber').val(data.rfidCardNumber);
+                    data.wallet.transactions.forEach(item=>{ 
+
+                        const txt1="<div class=\"thumbnail\">";
+                        const txt2="<span style=\"font-size:35px;padding:15px;\">₹ "+item.amount+" "+item.transactionType+"ed</span>";
+                        const txt3="<div class=\"caption\">";
+                        let txt4="";
+                        if(item.tollBoothID===null||item.tollBoothID===undefined){
+                            txt4="";
+                        }else{
+                            txt4="<p> at "+item.tollBoothID+"</p>";
+                        }
+                        const txt5="<p> on "+new Date(item.timeStamp).formatDate("dd/MM/yyyy hh:mm:ss t")+"</p></div></div>";
+                        $('#transactionContainer').append(txt1+txt2+txt3+txt4+txt5);
+                    });
+
+                    
+                    
+                }
+            };
+            function logout(){
+                sessionStorage.setItem("data",null);
+                alert("Succesfully Logged out");
+                window.location.href="http://localhost:3000/login";
+            }
+            Date.prototype.formatDate = function(format)
+            {
+                var date = this;
+                if (!format)
+                format="MM/dd/yyyy";               
+            
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();    
+            
+                format = format.replace("MM",month.toString().padL(2,"0"));        
+            
+                if (format.indexOf("yyyy") > -1)
+                    format = format.replace("yyyy",year.toString());
+                else if (format.indexOf("yy") > -1)
+                    format = format.replace("yy",year.toString().substr(2,2));
+            
+                format = format.replace("dd",date.getDate().toString().padL(2,"0"));
+            
+                var hours = date.getHours();       
+                if (format.indexOf("t") > -1)
+                {
+                if (hours > 11)
+                    format = format.replace("t","pm")
+                else
+                    format = format.replace("t","am")
+                }
+                if (format.indexOf("HH") > -1)
+                    format = format.replace("HH",hours.toString().padL(2,"0"));
+                if (format.indexOf("hh") > -1) {
+                    if (hours > 12) hours - 12;
+                    if (hours == 0) hours = 12;
+                    format = format.replace("hh",hours.toString().padL(2,"0"));        
+                }
+                if (format.indexOf("mm") > -1)
+                format = format.replace("mm",date.getMinutes().toString().padL(2,"0"));
+                if (format.indexOf("ss") > -1)
+                format = format.replace("ss",date.getSeconds().toString().padL(2,"0"));
+                return format;
+            }
+            String.repeat = function(chr,count)
+            {    
+                var str = ""; 
+                for(var x=0;x<count;x++) {str += chr}; 
+                return str;
+            }
+            String.prototype.padL = function(width,pad)
+            {
+                if (!width ||width<1)
+                    return this;   
+            
+                if (!pad) pad=" ";        
+                var length = width - this.length
+                if (length < 1) return this.substr(0,width);
+            
+                return (String.repeat(pad,length) + this).substr(0,width);    
+            }    
+            String.prototype.padR = function(width,pad)
+            {
+                if (!width || width<1)
+                    return this;        
+            
+                if (!pad) pad=" ";
+                var length = width - this.length
+                if (length < 1) this.substr(0,width);
+            
+                return (this + String.repeat(pad,length)).substr(0,width);
+            } 
+            $(document).ready(function(){
+                $("#queryHolder").on("keyup", function() {
+                    var value = $(this).val().toLowerCase();
+                    $("#transactionContainer").filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

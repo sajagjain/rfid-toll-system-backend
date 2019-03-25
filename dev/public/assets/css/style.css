@@ -1,0 +1,119 @@
+.btn-outline {
+    background-color: transparent;
+    color: inherit;
+    transition: all .5s;
+}
+
+.btn-primary.btn-outline {
+    color: #428bca;
+}
+
+.btn-success.btn-outline {
+    color: #5cb85c;
+}
+
+.btn-info.btn-outline {
+    color: #5bc0de;
+}
+
+.btn-warning.btn-outline {
+    color: #f0ad4e;
+}
+
+.btn-danger.btn-outline {
+    color: #d9534f;
+}
+
+.btn-primary.btn-outline:hover,
+.btn-success.btn-outline:hover,
+.btn-info.btn-outline:hover,
+.btn-warning.btn-outline:hover,
+.btn-danger.btn-outline:hover {
+    color: #fff;
+}
+
+.slant{
+    height:600px;
+    margin-top:-250px;
+    -ms-transform: skewY(-10deg); 
+    -webkit-transform: skewY(-10deg);
+    transform: skewY(-10deg);
+    color:white;
+    background: #000046;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #1CB5E0, #000046);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #1CB5E0, #000046); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+.unslantText{
+    padding-top:350px;
+    padding-left:25px;
+    -ms-transform: skewY(10deg);
+    -webkit-transform: skewY(10deg);
+    transform: skewY(10deg);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 45px;
+    color:white;
+}
+.unslantTextDesc{
+    
+    padding-left:25px;
+    -ms-transform: skewY(10deg);
+    -webkit-transform: skewY(10deg);
+    transform: skewY(10deg);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 25px;
+    color:white;
+}
+.unslantBtnContainer{
+    padding-left:25px;
+    padding-top:10px;
+    -ms-transform: skewY(10deg);
+    -webkit-transform: skewY(10deg);
+    transform: skewY(10deg);
+    font-family: 'Open Sans', sans-serif;
+    
+    
+}
+.unslantBtn{
+    margin-right:25px;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-right: 30px;
+    padding-left:30px;
+    font-size:18px;
+    border-radius: 0px;
+    color:#337ab7;
+    background-color:white;
+}
+label{
+    font-weight:600;
+    color:darkblue
+}
+.form-control:focus{
+    border-color:darkblue;
+}
+.row{
+    margin-top:30px;
+}
+.customFont{
+    font-family: 'Open Sans', sans-serif;
+}
+
+.modal {
+    text-align: center;
+  }
+  
+  @media screen and (min-width: 768px) { 
+    .modal:before {
+      display: inline-block;
+      vertical-align: middle;
+      content: " ";
+      height: 100%;
+    }
+  }
+  
+  .modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+  }
