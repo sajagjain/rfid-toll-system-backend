@@ -86,7 +86,7 @@
                     let check=sessionStorage.getItem("data");
                     //alert('hit'+check);
                     if(check===null||check=="null"||check==="null"||check===undefined||check==null||check==undefined){
-                        window.location.href="http://localhost:3000/login";
+                        window.location.href="https://rfid-project-sajagjain.herokuapp.com/login";
                     }
                 });
                 
@@ -99,7 +99,7 @@
                 
                     $.ajax({
                     type: "GET",
-                    url: "http://localhost:3000/user/"+data.rfidCardNumber,
+                    url: "https://rfid-project-sajagjain.herokuapp.com/user/"+data.rfidCardNumber,
                     dataType:'json',
                     success: function(result){
                         if(result.code==200){
@@ -138,7 +138,7 @@
             function logout(){
                 sessionStorage.setItem("data",null);
                 alert("Succesfully Logged out");
-                window.location.href="http://localhost:3000/login";
+                window.location.href="https://rfid-project-sajagjain.herokuapp.com/login";
             }
             Date.prototype.formatDate = function(format)
             {
