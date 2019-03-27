@@ -2,6 +2,15 @@ const MongoClient=require('mongodb').MongoClient;
 const url='mongodb://shivani:shivani123@ds123196.mlab.com:23196/rfid-db';
 const client=new MongoClient(url,{useNewUrlParser:true});
 
+const nodemailer=require('nodemailer');
+const transporter=nodemailer.createTransport({
+    service:'gmail',
+    auth:{
+        user:"platedrestaurants@gmail.com",
+        pass:"9826855195"
+    }
+});
+
 class DBOperations{
 
     getCollectionUser(fn){ 
@@ -66,30 +75,33 @@ class DBOperations{
             if(collection!==null&&collection!==undefined){
                 
                 //Refactoring Needed add conditions
-                collection.findOne({rfidCardNumber:newUser.rfidCardNumber}).then(data1=>{
+                collection.findOne({rfidCardNumber:newUser.rfidCardNumber},function(data1){
                     if(data1!==null&&data1.rfidCardNumber===newUser.rfidCardNumber){
                         console.log(data1);
                         fn({code:404,message:"RFID already exists."});
-                    }
-                });
-                collection.findOne({username:newUser.username}).then(data2=>{
-                    if(data2!==null&&data2.username===newUser.username){
-                        fn({code:404,message:"Username already exists."});
-                    }
-                });
-                collection.findOne({drivingLicenseNumber:newUser.drivingLicenseNumber}).then(data3=>{
-                    if(data3!==null&&data3.drivingLicenseNumber===newUser.drivingLicenseNumber){
-                        fn({code:404,message:"Driving License already exists."});
-                    }
-                });
-                collection.insertOne(newUser,function(err,result){
-                    //console.log(result);
-                    if(!err){
-                        fn({code:200,message:"User Created Successfully"});
                     }else{
-                        fn({code:404,message:"Unable To Create User"});
+                        collection.findOne({username:newUser.username},function(data2){
+                            if(data2!==null&&data2.username===newUser.username){
+                                fn({code:404,message:"Username already exists."});
+                            }else{
+                                collection.findOne({drivingLicenseNumber:newUser.drivingLicenseNumber},function(data3){
+                                    if(data3!==null&&data3.drivingLicenseNumber===newUser.drivingLicenseNumber){
+                                        fn({code:404,message:"Driving License already exists."});
+                                    }else{
+                                        collection.insertOne(newUser,function(err,result){
+                                            //console.log(result);
+                                            if(!err){
+                                                fn({code:200,message:"User Created Successfully"});
+                                            }else{
+                                                fn({code:404,message:"Unable To Create User"});
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
                     }
-                });                  
+                });
             }else{
                 fn({code:404,message:"Error Reaching Database"});
             }
@@ -100,7 +112,6 @@ class DBOperations{
         this.getCollectionUser(function(collection){
             if(collection!==null&&collection!==undefined)
             {
-
                 collection.updateOne({rfidCardNumber:rfidCardNumber}
                     ,{
                         $inc:{"wallet.walletBalance":eval(transaction.amount)},
@@ -108,9 +119,23 @@ class DBOperations{
                     }
                     ,function(err,result){
                        if(!err){
-                           fn({code:200,message:"Money added to your wallet Succesfully"})
+                            var data=collection.findOne({rfidCardNumber:rfidCardNumber},function(err,result){
+                                const mailOptions = {
+                                    from: 'dittosupport@gmail.com', // sender address
+                                    to: data.emailAddress, // list of receivers
+                                    subject: "Ditto : Amount Credited",
+                                    text:'Hi User,\n\nA amount of '+data.amount+" was credited to your ditto toll account\nRegards\nDitto Team",// plain text body
+                                };
+                                transporter.sendMail(mailOptions, function (err, info) {
+                                    if(err)
+                                    console.log(err)
+                                    else
+                                    console.log(info);
+                                });
+                            });
+                            fn({code:200,message:"Money added to your wallet Succesfully"});
                        }else{
-                           fn({code:404,message:"Unable to add money to your wallet"+err.message}) 
+                            fn({code:404,message:"Unable to add money to your wallet"+err.message}) ;
                        }
                     });
             }else{
@@ -136,59 +161,111 @@ class DBOperations{
     }
 
     swipeToPayToll(rfidCardNumber,transaction,fn){
-        var self=this;
-
+        
+        //Update User Account
         this.getCollectionUser(function(collection){
+            
             if(collection!==null&&collection!==undefined)
             {
-                self.getCollectionTolls(function(tolls){
-                    tolls.findOne({tollBoothID:transaction.tollBoothID})
-                    .then(data=>{
-                        tolls.updateOne({tollBoothID:data.tollBoothID},
-                        {
-                            $inc:{"wallet.walletBalance":eval(transaction.amount)},
-                            $push:{"wallet.transactions":transaction}    
-                        },
-                        function(err,result){
-                            if(err){
-                                fn({code:404,message:"Unable to pay for toll"+err.message}) 
-                            }
-                        });
-                    });
-                });
-
                 transaction.transactionType="Debit";
-                collection.updateOne({rfidCardNumber:rfidCardNumber},
-                    {
-                        $inc:{"wallet.walletBalance":eval("-"+transaction.amount)},
-                        $push:{"wallet.transactions":transaction}
-                    }
-                    ,function(err,result){
-                       if(!err){
-                           fn({code:200,message:"Money deducted from your wallet Succesfully"})
-                       }else{
-                            this.getCollectionTolls(function(tolls){
-                                tolls.findOne({tollBoothID:transaction.tollBoothID})
-                                .then(data=>{
-                                    tolls.updateOne({tollBoothID:data.tollBoothID},
-                                    {
-                                        $inc:{"wallet.walletBalance":eval("-"+transaction.amount)},
-                                        $pull:{"wallet.transactions":transaction}
-                                    },
-                                    function(err,result){
-                                        if(err){
-                                            
-                                        }
+                collection.findOne({rfidCardNumber:rfidCardNumber},function(er,result){
+                    if(result==null||result==undefined){
+                        fn({code:404,message:"Account Not Found"});
+                    }else{
+                        if(result.wallet.walletBalance>transaction.amount){
+                            collection.updateOne({rfidCardNumber:rfidCardNumber},
+                            {
+                                $inc:{"wallet.walletBalance":eval("-"+transaction.amount)},
+                                $push:{"wallet.transactions":transaction}
+                            }
+                            ,function(err,result){
+                                if(err){
+                                    fn({code:404,message:"Database Error Occoured."})
+                                }
+                                else if(result.modifiedCount>0){
+                                    collection.findOne({rfidCardNumber:rfidCardNumber},function(err,result){
+                                        const mailOptions = {
+                                            from: 'dittosupport@gmail.com', // sender address
+                                            to: result.emailAddress, // list of receivers
+                                            subject: "Ditto : Amount Debited",
+                                            text:'Hi User,\n\nA amount of '+transaction.amount+" was debited from your ditto toll account\nRegards\nDitto Team", // Subject line// plain text body
+                                        };
+                                        transporter.sendMail(mailOptions, function (err, info) {
+                                            if(err)
+                                            console.log(err)
+                                            else
+                                            console.log(info);
+                                        });
                                     });
-                                });
-                            });        
-                           fn({code:404,message:"Unable to pay for toll"+err.message}) 
-                       }
-                    });
+                                    fn({code:200,message:"Money deducted from your wallet Succesfully"});
+                                }else{
+                                    fn({code:404,message:"Update count is 0"});
+                                }
+                            });  
+                        }else{
+                            console.log("Result amount is"+result.amount)
+                            fn({code:404,message:"Insufficient Balance"});
+                        }
+                    }
+                });
+                
             }else{
                 fn({code:404,message:"Error Reaching Database"});
             }
         });
+
+        // //Update Toll Account
+        // this.getCollectionTolls(function(tolls){
+        //     // if(tolls!=null&&tolls!=undefined){
+        //     //     tolls.findOne({tollBoothID:transaction.tollBoothID})
+        //     //     .then(data=>{
+        //     //         tolls.updateOne({tollBoothID:data.tollBoothID},
+        //     //         {
+        //     //             $inc:{"wallet.walletBalance":eval(transaction.amount)},
+        //     //             $push:{"wallet.transactions":transaction}    
+        //     //         },
+        //     //         function(err,result){
+        //     //             if(err){
+        //     //                 fn({code:404,message:"Unable to pay for toll"+err.message}) 
+        //     //             }
+        //     //             else if(result.modifiedCount>0){
+                            
+        //     //             }
+        //     //         });
+        //     //     });
+        //     // }
+        //     if(tolls!==null&&tolls!==undefined)
+        //     {
+        //         transaction.transactionType="Credit";
+        //         tolls.findOne({tollBoothID:transaction.tollBoothID},function(er,result){
+        //             if(result==null||result==undefined){
+        //                 fn({code:404,message:"Toll Account Not Found"});
+        //             }else{
+                        
+        //                 tolls.updateOne({tollBoothID:transaction.tollBoothID},
+        //                 {
+        //                     $inc:{"wallet.walletBalance":eval(transaction.amount)},
+        //                     $push:{"wallet.transactions":transaction}
+        //                 }
+        //                 ,function(err,result){
+        //                     if(err){
+        //                         fn({code:404,message:"Database Error Occoured."})
+        //                     }
+        //                     else if(result.modifiedCount>0){
+        //                         fn({code:200,message:"Money deducted from your wallet Succesfully"});
+        //                     }else{
+        //                         fn({code:404,message:"Update count is 0"});
+        //                     }
+        //                 });  
+        //             }
+        //         });
+                
+        //     }else{
+        //         fn({code:404,message:"Error Reaching Database"});
+        //     }
+        // });
+
+        
     }
 
     login(username,password,fn){
