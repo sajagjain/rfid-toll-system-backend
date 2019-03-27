@@ -15,6 +15,10 @@ const Model=require('./models/Model');
 
 app.use(express.static(__dirname+'/public'));
 
+const cors=require('cors');
+
+app.use(cors());
+
 app.get('/',function(req,res){
     res.sendFile("./public/register.html",{root:__dirname});
 });
