@@ -75,30 +75,28 @@ class DBOperations{
             if(collection!==null&&collection!==undefined){
                 console.log(newUser);
                 //Refactoring Needed add conditions
-                collection.findOne({rfidCardNumber:newUser.rfidCardNumber},function(data1){
+                collection.findOne({rfidCardNumber:newUser.rfidCardNumber},function(err,data1){
                     console.log(data1);
                     if(data1!==null&&data1.rfidCardNumber===newUser.rfidCardNumber){
                         console.log(data1);
                         fn({code:404,message:"RFID already exists."});
                     }else{
-                        collection.findOne({username:newUser.username},function(data2){
+                        collection.findOne({username:newUser.username},function(err,data2){
                             if(data2!==null&&data2.username===newUser.username){
                                 fn({code:404,message:"Username already exists."});
                             }else{
-                                collection.findOne({drivingLicenseNumber:newUser.drivingLicenseNumber},function(data3){
+                                collection.findOne({drivingLicenseNumber:newUser.drivingLicenseNumber},function(err,data3){
                                     if(data3!==null&&data3.drivingLicenseNumber===newUser.drivingLicenseNumber){
                                         fn({code:404,message:"Driving License already exists."});
                                     }else{
-                                        // collection.insertOne(newUser,function(err,result){
-                                        //     //console.log(result);
-                                        //     if(!err){
-                                        //         fn({code:200,message:"User Created Successfully"});
-                                        //     }else{
-                                        //         fn({code:404,message:"Unable To Create User"});
-                                        //     }
-                                        // });
-                                        console.log("Inside Reached");
-                                        fn({code:200,message:"Inside"});
+                                        collection.insertOne(newUser,function(err,result){
+                                            //console.log(result);
+                                            if(!err){
+                                                fn({code:200,message:"User Created Successfully"});
+                                            }else{
+                                                fn({code:404,message:"Unable To Create User"});
+                                            }
+                                        });
                                     }
                                 });
                             }
