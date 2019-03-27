@@ -76,6 +76,7 @@ class DBOperations{
                 
                 //Refactoring Needed add conditions
                 collection.findOne({rfidCardNumber:newUser.rfidCardNumber},function(data1){
+                    console.log(data1);
                     if(data1!==null&&data1.rfidCardNumber===newUser.rfidCardNumber){
                         console.log(data1);
                         fn({code:404,message:"RFID already exists."});
@@ -88,14 +89,15 @@ class DBOperations{
                                     if(data3!==null&&data3.drivingLicenseNumber===newUser.drivingLicenseNumber){
                                         fn({code:404,message:"Driving License already exists."});
                                     }else{
-                                        collection.insertOne(newUser,function(err,result){
-                                            //console.log(result);
-                                            if(!err){
-                                                fn({code:200,message:"User Created Successfully"});
-                                            }else{
-                                                fn({code:404,message:"Unable To Create User"});
-                                            }
-                                        });
+                                        // collection.insertOne(newUser,function(err,result){
+                                        //     //console.log(result);
+                                        //     if(!err){
+                                        //         fn({code:200,message:"User Created Successfully"});
+                                        //     }else{
+                                        //         fn({code:404,message:"Unable To Create User"});
+                                        //     }
+                                        // });
+                                        console.log("Inside Reached");
                                     }
                                 });
                             }
