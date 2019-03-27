@@ -73,7 +73,7 @@ class DBOperations{
         this.getCollectionUser(function(collection){
 
             if(collection!==null&&collection!==undefined){
-                
+                console.log(newUser);
                 //Refactoring Needed add conditions
                 collection.findOne({rfidCardNumber:newUser.rfidCardNumber},function(data1){
                     console.log(data1);
