@@ -17,6 +17,9 @@ $(document).ready(function(){
             dataType:'json',
             success: function(result){
                 console.log(result);
+                if(result.code!==200){
+                    $('#errorLabel').text(result.message);
+                }
             }
         });
         $('#registerForm')[0].reset();
