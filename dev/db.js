@@ -98,6 +98,7 @@ class DBOperations{
                                         //     }
                                         // });
                                         console.log("Inside Reached");
+                                        fn({code:200,message:"Inside"});
                                     }
                                 });
                             }
