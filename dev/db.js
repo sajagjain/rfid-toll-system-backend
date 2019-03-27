@@ -122,7 +122,7 @@ class DBOperations{
                        if(!err){
                             var data=collection.findOne({rfidCardNumber:rfidCardNumber},function(err,result){
                                 const mailOptions = {
-                                    from: 'dittosupport@gmail.com', // sender address
+                                    from: 'platedrestaurants@gmail.com', // sender address
                                     to: data.emailAddress, // list of receivers
                                     subject: "Ditto : Amount Credited",
                                     text:'Hi User,\n\nA amount of '+data.amount+" was credited to your ditto toll account\nRegards\nDitto Team",// plain text body
@@ -186,7 +186,7 @@ class DBOperations{
                                 else if(result.modifiedCount>0){
                                     collection.findOne({rfidCardNumber:rfidCardNumber},function(err,result){
                                         const mailOptions = {
-                                            from: 'dittosupport@gmail.com', // sender address
+                                            from: 'platedrestaurants@gmail.com', // sender address
                                             to: result.emailAddress, // list of receivers
                                             subject: "Ditto : Amount Debited",
                                             text:'Hi User,\n\nA amount of '+transaction.amount+" was debited from your ditto toll account\nRegards\nDitto Team", // Subject line// plain text body
