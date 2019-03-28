@@ -123,9 +123,9 @@ class DBOperations{
                            collection.findOne({rfidCardNumber:rfidCardNumber},function(err,result){
                                      const mailOptions = {
                                     from: 'platedrestaurants@gmail.com', // sender address
-                                    to: data.emailAddress, // list of receivers
+                                    to: result.emailAddress, // list of receivers
                                     subject: "Ditto : Amount Credited",
-                                    text:'Hi User,\n\nA amount of '+data.amount+" was credited to your ditto toll account\nRegards\nDitto Team",// plain text body
+                                    text:'Hi User,\n\nA amount of '+transaction.amount+" was credited to your ditto toll account\nRegards\nDitto Team",// plain text body
                                 };
                
                                         transporter.sendMail(mailOptions, function (err, info) {
