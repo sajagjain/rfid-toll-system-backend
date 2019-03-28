@@ -205,7 +205,7 @@ class DBOperations{
                             });  
                         }else{
                             console.log("Result amount is"+result.amount)
-                            fn({code:404,message:"Insufficient Balance"});
+                            fn({code:300,message:"Insufficient Balance"});
                         }
                     }
                 });
