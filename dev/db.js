@@ -121,7 +121,9 @@ class DBOperations{
                     ,function(err,result){
                        if(!err){
                            collection.findOne({rfidCardNumber:rfidCardNumber},function(err,result){
-                                     const mailOptions = {
+                                 if(result.emailAddress!==null&&result.emailAddress!==undefined) 
+                                 {
+                                    const mailOptions = {
                                     from: 'platedrestaurants@gmail.com', // sender address
                                     to: result.emailAddress, // list of receivers
                                     subject: "Ditto : Amount Credited",
@@ -134,6 +136,7 @@ class DBOperations{
                                             else
                                             console.log(info);
                                         });
+                                 }
                                     });
                             fn({code:200,message:"Money added to your wallet Succesfully"});
                        }else{
