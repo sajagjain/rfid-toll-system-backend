@@ -113,7 +113,7 @@ class DBOperations{
         this.getCollectionUser(function(collection){
             if(collection!==null&&collection!==undefined)
             {
-                collection.updateOne({rfidCardNumber:rfidCardNumber}*/
+                collection.updateOne({rfidCardNumber:rfidCardNumber}
                     ,{
                         $inc:{"wallet.walletBalance":eval(transaction.amount)},
                         $push:{"wallet.transactions":transaction}
@@ -127,7 +127,7 @@ class DBOperations{
                                     subject: "Ditto : Amount Credited",
                                     text:'Hi User,\n\nA amount of '+data.amount+" was credited to your ditto toll account\nRegards\nDitto Team",// plain text body
                                 };
-                collection.updateOne({rfidCardNumber:rfidCardNumber}
+               
                                         transporter.sendMail(mailOptions, function (err, info) {
                                             if(err)
                                             console.log(err)
