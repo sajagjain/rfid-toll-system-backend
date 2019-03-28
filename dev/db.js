@@ -113,27 +113,28 @@ class DBOperations{
         this.getCollectionUser(function(collection){
             if(collection!==null&&collection!==undefined)
             {
-                collection.updateOne({rfidCardNumber:rfidCardNumber}
+                collection.updateOne({rfidCardNumber:rfidCardNumber}*/
                     ,{
                         $inc:{"wallet.walletBalance":eval(transaction.amount)},
                         $push:{"wallet.transactions":transaction}
                     }
                     ,function(err,result){
                        if(!err){
-                            var data=collection.findOne({rfidCardNumber:rfidCardNumber},function(err,result){
-                                const mailOptions = {
+                           collection.findOne({rfidCardNumber:rfidCardNumber},function(err,result){
+                                     const mailOptions = {
                                     from: 'platedrestaurants@gmail.com', // sender address
                                     to: data.emailAddress, // list of receivers
                                     subject: "Ditto : Amount Credited",
                                     text:'Hi User,\n\nA amount of '+data.amount+" was credited to your ditto toll account\nRegards\nDitto Team",// plain text body
                                 };
-                                transporter.sendMail(mailOptions, function (err, info) {
-                                    if(err)
-                                    console.log(err)
-                                    else
-                                    console.log(info);
-                                });
-                            });
+                collection.updateOne({rfidCardNumber:rfidCardNumber}
+                                        transporter.sendMail(mailOptions, function (err, info) {
+                                            if(err)
+                                            console.log(err)
+                                            else
+                                            console.log(info);
+                                        });
+                                    });
                             fn({code:200,message:"Money added to your wallet Succesfully"});
                        }else{
                             fn({code:404,message:"Unable to add money to your wallet"+err.message}) ;
