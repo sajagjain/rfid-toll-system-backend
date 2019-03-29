@@ -114,6 +114,8 @@
                     success: function(result){
                         if(result.code==200){
                             console.log(result);
+                            const data=JSON.parse(sessionStorage.getItem("data"));
+                            formatAndDisplay(data);
                             window.location.href="https://rfid-project-sajagjain.herokuapp.com/dashboard";
                         }else{
                             console.log(result);
