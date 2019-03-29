@@ -142,7 +142,7 @@
                     data.wallet.transactions.forEach(item=>{ 
                         if(item.transactionType==="Debit"){
                             const txt1="<div class=\"shadow-md thumbnail grow \">";
-                            const txt2="<span class=\"text-danger\" style=\"font-size:35px;padding:15px;\">₹ "+item.amount+" "+item.transactionType+"ed</span>";
+                            const txt2="<span class=\"text-danger\" style=\"font-size:35px;padding:15px;\">₹ "+item.amount+"</span>";
                             const txt3="<div class=\"caption\">";
                             let txt4="";
                             if(item.tollBoothID===null||item.tollBoothID===undefined){
@@ -154,7 +154,7 @@
                             $('#transactionContainer').append(txt1+txt2+txt3+txt4+txt5);
                         }else{
                             const txt1="<div class=\"shadow-md thumbnail grow \">";
-                            const txt2="<span class=\"text-success\" style=\"font-size:35px;padding:15px;\">₹ "+item.amount+" "+item.transactionType+"ed</span>";
+                            const txt2="<span class=\"text-success\" style=\"font-size:35px;padding:15px;\">₹ "+item.amount+"</span>";
                             const txt3="<div class=\"caption\">";
                             let txt4="";
                             if(item.tollBoothID===null||item.tollBoothID===undefined){
