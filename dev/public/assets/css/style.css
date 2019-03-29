@@ -144,13 +144,17 @@ label{
     vertical-align: middle;
   }
 
-    .grow { transition: all .4s ease-in-out; }
+    .growgreen { transition: all .4s ease-in-out; }
     
-    .grow:hover { 
+    .growgreen:hover { 
         transform: scale(1.01);
-        -webkit-box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.75);
-        -moz-box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.75);
-        box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.75);
+        outline: #5cb85c solid 1px;
+    }
+    .growred { transition: all .4s ease-in-out; }
+    
+    .growred:hover { 
+        transform: scale(1.01);
+        outline: #d9534f solid 1px;
     }
 
   
