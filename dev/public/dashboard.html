@@ -98,7 +98,7 @@
                     if(data!==null&&data!==undefined){
                     
                         getUserData();
-                    }
+                    
                     data=JSON.parse(sessionStorage.getItem("data"));
                         $("#dusername").text("Hello "+data.name.charAt(0).toUpperCase()+data.name.slice(1));
                         $("#dbalance").text("₹ "+data.wallet.walletBalance);
@@ -118,7 +118,7 @@
                             $('#transactionContainer').append(txt1+txt2+txt3+txt4+txt5);
                         });
 
-                        
+                    }    
                         
                     
                 });
