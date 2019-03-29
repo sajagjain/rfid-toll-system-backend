@@ -213,7 +213,7 @@
             $(document).ready(function(){
                 $("#queryHolder").on("keyup", function() {
                     var value = $(this).val().toLowerCase();
-                    $("#thumbnail").filter(function() {
+                    $("#transactionContainer div").filter(function() {
                         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     });
                 });
