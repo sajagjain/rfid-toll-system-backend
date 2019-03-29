@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="row">
-                    <div id="transactionContainer" class="shadow-md col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1" style="padding:30px;">
+                    <div id="transactionContainer" class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1" style="padding:30px;">
                         <h3>Transactions</h3>
                         <hr/>
                     </div>
@@ -121,7 +121,7 @@
                     $('#mrfidCardNumber').val(data.rfidCardNumber);
                     data.wallet.transactions.forEach(item=>{ 
 
-                        const txt1="<div class=\"thumbnail\">";
+                        const txt1="<div class=\"shadow-md thumbnail\">";
                         const txt2="<span style=\"font-size:35px;padding:15px;\">₹ "+item.amount+" "+item.transactionType+"ed</span>";
                         const txt3="<div class=\"caption\">";
                         let txt4="";
