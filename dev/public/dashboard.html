@@ -140,18 +140,31 @@
                     $("#dbalance").text("₹ "+data.wallet.walletBalance);
                     $('#mrfidCardNumber').val(data.rfidCardNumber);
                     data.wallet.transactions.forEach(item=>{ 
-
-                        const txt1="<div class=\"shadow-md thumbnail grow \">";
-                        const txt2="<span style=\"font-size:35px;padding:15px;\">₹ "+item.amount+" "+item.transactionType+"ed</span>";
-                        const txt3="<div class=\"caption\">";
-                        let txt4="";
-                        if(item.tollBoothID===null||item.tollBoothID===undefined){
-                            txt4="";
+                        if(item.transactionType==="Debit"){
+                            const txt1="<div class=\"shadow-md thumbnail grow \">";
+                            const txt2="<span class=\"text-danger\" style=\"font-size:35px;padding:15px;\">₹ "+item.amount+" "+item.transactionType+"ed</span>";
+                            const txt3="<div class=\"caption\">";
+                            let txt4="";
+                            if(item.tollBoothID===null||item.tollBoothID===undefined){
+                                txt4="";
+                            }else{
+                                txt4="<p> at "+item.tollBoothID+"</p>";
+                            }
+                            const txt5="<p> on "+new Date(item.timeStamp).formatDate("dd/MM/yyyy hh:mm:ss t")+"</p></div></div>";
+                            $('#transactionContainer').append(txt1+txt2+txt3+txt4+txt5);
                         }else{
-                            txt4="<p> at "+item.tollBoothID+"</p>";
+                            const txt1="<div class=\"shadow-md thumbnail grow \">";
+                            const txt2="<span class=\"text-success\" style=\"font-size:35px;padding:15px;\">₹ "+item.amount+" "+item.transactionType+"ed</span>";
+                            const txt3="<div class=\"caption\">";
+                            let txt4="";
+                            if(item.tollBoothID===null||item.tollBoothID===undefined){
+                                txt4="";
+                            }else{
+                                txt4="<p> at "+item.tollBoothID+"</p>";
+                            }
+                            const txt5="<p> on "+new Date(item.timeStamp).formatDate("dd/MM/yyyy hh:mm:ss t")+"</p></div></div>";
+                            $('#transactionContainer').append(txt1+txt2+txt3+txt4+txt5);
                         }
-                        const txt5="<p> on "+new Date(item.timeStamp).formatDate("dd/MM/yyyy hh:mm:ss t")+"</p></div></div>";
-                        $('#transactionContainer').append(txt1+txt2+txt3+txt4+txt5);
                     });
 
                 }    
