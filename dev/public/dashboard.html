@@ -97,7 +97,7 @@
                     console.log(data);
                     if(data!==null&&data!==undefined){
                     
-                        getUserData();
+                        getUserData(data);
                     
                     data=JSON.parse(sessionStorage.getItem("data"));
                         $("#dusername").text("Hello "+data.name.charAt(0).toUpperCase()+data.name.slice(1));
@@ -125,7 +125,7 @@
                 
                 
             };
-            function getUserData(){
+            function getUserData(data){
                 $.ajax({
                         type: "GET",
                         url: "https://rfid-project-sajagjain.herokuapp.com/user/"+data.rfidCardNumber,
