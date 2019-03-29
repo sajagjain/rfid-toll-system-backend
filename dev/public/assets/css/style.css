@@ -156,5 +156,8 @@ label{
         transform: scale(1.01);
         outline: #d9534f solid 1px;
     }
+    .pointerIcon:hover{
+        cursor: pointer;
+    }
 
   
