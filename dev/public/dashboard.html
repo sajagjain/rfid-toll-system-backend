@@ -99,7 +99,7 @@
                     
                         getUserData(data);
                     
-                    data=JSON.parse(sessionStorage.getItem("data"));
+                    
                         $("#dusername").text("Hello "+data.name.charAt(0).toUpperCase()+data.name.slice(1));
                         $("#dbalance").text("₹ "+data.wallet.walletBalance);
                         $('#mrfidCardNumber').val(data.rfidCardNumber);
