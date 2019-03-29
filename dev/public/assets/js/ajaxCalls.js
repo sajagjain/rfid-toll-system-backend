@@ -48,25 +48,6 @@ $(document).ready(function(){
         });
         $('#loginForm')[0].reset();
     });
-    $('#addMoneyButton').click(function(){   
-        $.ajax({
-            type: "POST",
-            url: "https://rfid-project-sajagjain.herokuapp.com/addMoney",
-            data: {
-                "rfidCardNumber":$('#mrfidCardNumber').val(),
-                "amount":$('#mamount').val(),
-            },
-            dataType:'json',
-            success: function(result){
-                if(result.code==200){
-                    console.log(result);
-                    window.location.href="https://rfid-project-sajagjain.herokuapp.com/dashboard";
-                }else{
-                    console.log(result);
-                }
-            }
-        });
-        $('#addMoneyForm')[0].reset();
-    });
+    
     
 });
