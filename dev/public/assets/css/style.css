@@ -144,8 +144,8 @@ label{
     vertical-align: middle;
   }
 
-  .grow { transition: all .2s ease-in-out; }
+  .grow { transition: all .4s ease-in-out; }
     
-  .grow:hover { transform: scale(1.1); }
+  .grow:hover { transform: scale(1.01); }
 
   
