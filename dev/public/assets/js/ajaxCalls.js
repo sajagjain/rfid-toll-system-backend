@@ -19,6 +19,8 @@ $(document).ready(function(){
                 console.log(result);
                 if(result.code!==200){
                     $('#errorLabel').text(result.message);
+                }else{
+                    window.location.href="https://rfid-project-sajagjain.herokuapp.com/login";
                 }
             }
         });
