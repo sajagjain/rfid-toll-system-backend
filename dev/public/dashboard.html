@@ -91,53 +91,56 @@
                     if(check===null||check=="null"||check==="null"||check===undefined||check==null||check==undefined){
                         window.location.href="https://rfid-project-sajagjain.herokuapp.com/login";
                     }
-                });
-                
-                const data=JSON.parse(sessionStorage.getItem("data"));
-                
-                
-                
-                console.log(data);
-                if(data!==null&&data!==undefined){
-                
-                    $.ajax({
-                    type: "GET",
-                    url: "https://rfid-project-sajagjain.herokuapp.com/user/"+data.rfidCardNumber,
-                    dataType:'json',
-                    success: function(result){
-                        if(result.code==200){
-                            console.log(result);
-                            sessionStorage.setItem("data",JSON.stringify(result.data));
-                        }else{
-                            console.log(result);
-                            $('#messageLabelLoginPage').text(result.message);
-                        }
+
+
+                    const data=JSON.parse(sessionStorage.getItem("data"));
+                    console.log(data);
+                    if(data!==null&&data!==undefined){
+                    
+                        getUserData();
                     }
+                    data=JSON.parse(sessionStorage.getItem("data"));
+                        $("#dusername").text("Hello "+data.name.charAt(0).toUpperCase()+data.name.slice(1));
+                        $("#dbalance").text("₹ "+data.wallet.walletBalance);
+                        $('#mrfidCardNumber').val(data.rfidCardNumber);
+                        data.wallet.transactions.forEach(item=>{ 
+
+                            const txt1="<div class=\"shadow-md thumbnail\">";
+                            const txt2="<span style=\"font-size:35px;padding:15px;\">₹ "+item.amount+" "+item.transactionType+"ed</span>";
+                            const txt3="<div class=\"caption\">";
+                            let txt4="";
+                            if(item.tollBoothID===null||item.tollBoothID===undefined){
+                                txt4="";
+                            }else{
+                                txt4="<p> at "+item.tollBoothID+"</p>";
+                            }
+                            const txt5="<p> on "+new Date(item.timeStamp).formatDate("dd/MM/yyyy hh:mm:ss t")+"</p></div></div>";
+                            $('#transactionContainer').append(txt1+txt2+txt3+txt4+txt5);
+                        });
+
+                        
+                        
+                    
                 });
                 
-
-                    $("#dusername").text("Hello "+data.name.charAt(0).toUpperCase()+data.name.slice(1));
-                    $("#dbalance").text("₹ "+data.wallet.walletBalance);
-                    $('#mrfidCardNumber').val(data.rfidCardNumber);
-                    data.wallet.transactions.forEach(item=>{ 
-
-                        const txt1="<div class=\"shadow-md thumbnail\">";
-                        const txt2="<span style=\"font-size:35px;padding:15px;\">₹ "+item.amount+" "+item.transactionType+"ed</span>";
-                        const txt3="<div class=\"caption\">";
-                        let txt4="";
-                        if(item.tollBoothID===null||item.tollBoothID===undefined){
-                            txt4="";
-                        }else{
-                            txt4="<p> at "+item.tollBoothID+"</p>";
-                        }
-                        const txt5="<p> on "+new Date(item.timeStamp).formatDate("dd/MM/yyyy hh:mm:ss t")+"</p></div></div>";
-                        $('#transactionContainer').append(txt1+txt2+txt3+txt4+txt5);
-                    });
-
-                    
-                    
-                }
+                
             };
+            function getUserData(){
+                $.ajax({
+                        type: "GET",
+                        url: "https://rfid-project-sajagjain.herokuapp.com/user/"+data.rfidCardNumber,
+                        dataType:'json',
+                        success: function(result){
+                                if(result.code==200){
+                                    console.log(result);
+                                    sessionStorage.setItem("data",JSON.stringify(result.data));
+                                }else{
+                                    console.log(result);
+                                    $('#messageLabelLoginPage').text(result.message);
+                                }
+                            }
+                });
+            }
             function logout(){
                 sessionStorage.setItem("data",null);
                 alert("Succesfully Logged out");
